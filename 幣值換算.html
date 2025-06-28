@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>換算機</title>
+  </head>
+  <body>
+    <span>1雪：</span><input id="雪比楓" type="number"/><span> W 楓幣</span>
+    <hr/>
+    <input id="雪" type="number"/><span> 雪</span><br>
+    <input id="台幣" type="number"/><span> 台幣</span><br>
+    <input id="楓幣" type="number"/><span> W 楓幣</span><br>
+    <input id="WC" type="number"/><span> WC</span><br>
+    <script>
+      雪比楓.addEventListener("input", () => {
+        楓幣.value = 雪.value * 雪比楓.value;
+      });
+      雪.addEventListener("input", () => {
+        台幣.value = 雪.value * 4.09;
+        楓幣.value = 雪.value * 雪比楓.value;
+        WC.value = 雪.value * 27.2727;
+      });
+      台幣.addEventListener("input", () => {
+        雪.value = 台幣.value * 0.244;
+        楓幣.value = 雪.value * 雪比楓.value;
+        WC.value = 台幣.value * 6.666;
+      });
+      楓幣.addEventListener("input", () => {
+        雪.value = 楓幣.value / 雪比楓.value;
+        台幣.value = 雪.value * 4.09;
+        WC.value = 雪.value * 27.2727;
+      });
+      WC.addEventListener("input", () => {
+        雪.value = WC.value * 0.0366;
+        台幣.value = WC.value * 0.15;
+        楓幣.value = 雪.value * 雪比楓.value;
+      });
+    </script>
+  </body>
+</html>
