@@ -1,0 +1,93 @@
+body {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.外殼 {
+  background: #97b4c1;
+  box-shadow: inset 0 0 0 1px #51769b;
+  border: 2px solid #fff;
+  outline: 2px solid #192560;
+  padding: 5px;
+  width: max-content;
+  margin: 8px;
+}
+.外殼 .標題 {
+  background: #faf8f6;
+  border: 2px solid #8ea4ba;
+  border-radius: 6px;
+  margin-bottom: 4px;
+  padding: 0 8px;
+}
+
+.道具列 {
+  display: grid;
+  grid-template-columns: repeat(8, 62px);
+  gap: 3px;
+}
+
+
+
+.item {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+  background: #eed;
+  border: 2px inset #ffe;
+}
+
+.item[name="披魔防60%"] .name { font-size: 10px; }
+.item[name="單棍命中10%"] .name { font-size: 9px; }
+.item[name="指虎命中60%"] .name { font-size: 9px; }
+.item[name="破舊的披風"] .name { font-size: 11px; }
+
+.item .count {
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-family: fantasy;
+  font-size: 14px;
+  --ts: 0 0 2px #000;
+  text-shadow: var(--ts), var(--ts), var(--ts), var(--ts), var(--ts), var(--ts);
+  color: #fff;
+}
+
+.item .name {
+  font-size: 12px;
+}
+
+.icon {
+  width: 32px;
+  height: 32px;
+  display: block;
+  background: var(--icon);
+  border: 0;
+}
+
+.icon[itype="卷軸10%"] { background: url(./img/one/卷軸10_m.png) no-repeat right bottom, var(--icon); }
+.icon[itype="卷軸60%"] { background: url(./img/one/卷軸60_m.png) no-repeat right bottom, var(--icon); }
+.icon[itype="卷軸100%"] { background: url(./img/one/卷軸100_m.png) no-repeat right bottom, var(--icon); }
+
+.item .cnt {
+  position: absolute;
+  display: block;
+  top: 100%;
+  left: 0;
+  background: #647593e6;
+  z-index: 100;
+  color: #fff;
+  outline: 2px solid #647593e6;
+  outline-offset: 2px;
+  border-radius: 2px;
+  padding: 4px 8px;
+  max-width: 180px;
+  width: max-content;
+}
+
+.item:not(:hover) .cnt, .item .cnt:empty {
+  display: none;
+}
