@@ -44,6 +44,9 @@ body {
 .item[name="單棍命中10%"] .name { font-size: 9px; }
 .item[name="指虎命中60%"] .name { font-size: 9px; }
 .item[name="破舊的披風"] .name { font-size: 11px; }
+.item[name="單劍命中10%"] .name { font-size: 9px; }
+.item[name="雙棍命中10%"] .name { font-size: 9px; }
+.item[name="矛命中60%"] .name { font-size: 11px; }
 
 .item .count {
   position: absolute;
