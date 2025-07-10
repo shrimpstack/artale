@@ -40,6 +40,7 @@ body {
   border: 2px inset #ffe;
 }
 
+.item[name="指虎命中10%"] .name { font-size: 9px; }
 .item[name="披魔防60%"] .name { font-size: 10px; }
 .item[name="單棍命中10%"] .name { font-size: 9px; }
 .item[name="指虎命中60%"] .name { font-size: 9px; }
