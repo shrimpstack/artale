@@ -11,6 +11,8 @@ window.addEventListener("load", async () => {
   顯示items(存放res.data.filter(({who}) => who == "花果山"), 花果山存放);
   顯示items(存放res.data.filter(({who}) => who == "夏目雪"), 夏目雪存放);
   顯示items(存放res.data.filter(({who}) => who == "卡皮"), 卡皮存放);
+  顯示items(存放res.data.filter(({who}) => who == "會長"), 會長存放);
+  顯示items(存放res.data.filter(({who}) => who == "蝦的"), 蝦的雜物);
 });
 
 function 顯示items(items, 目標el) {
