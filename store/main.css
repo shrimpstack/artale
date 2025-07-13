@@ -41,13 +41,25 @@ body {
 }
 
 .item[name="指虎命中10%"] .name { font-size: 9px; }
-.item[name="披魔防60%"] .name { font-size: 10px; }
 .item[name="單棍命中10%"] .name { font-size: 9px; }
 .item[name="指虎命中60%"] .name { font-size: 9px; }
-.item[name="破舊的披風"] .name { font-size: 11px; }
 .item[name="單劍命中10%"] .name { font-size: 9px; }
 .item[name="雙棍命中10%"] .name { font-size: 9px; }
+.item[name="單斧命中10%"] .name { font-size: 9px; }
+.item[name="披魔防60%"] .name { font-size: 10px; }
+.item[name="破舊的披風"] .name { font-size: 11px; }
 .item[name="矛命中60%"] .name { font-size: 11px; }
+
+.item[name="朱礦石母礦"] .name { font-size: 11px; }
+.item[name="紫礦石母礦"] .name { font-size: 11px; }
+.item[name="石榴石母礦"] .name { font-size: 11px; }
+.item[name="紫水晶母礦"] .name { font-size: 11px; }
+.item[name="海藍石母礦"] .name { font-size: 11px; }
+.item[name="祖母綠母礦"] .name { font-size: 11px; }
+.item[name="蛋白石母礦"] .name { font-size: 11px; }
+.item[name="藍寶石母礦"] .name { font-size: 11px; }
+.item[name="黑水晶母礦"] .name { font-size: 11px; }
+.item[name="鋰礦石母礦"] .name { font-size: 11px; }
 
 .item .count {
   position: absolute;
