@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>表攻計算機</title>
+    <meta charset="utf-8"/>
+    <style>
+      body {
+        background: #333;
+        color: #fff;
+        font-family: sans-serif;
+        padding: 16px;
+        margin: 0;
+        box-sizing: border-box;
+        height: 100vh;
+        overflow: hidden;
+      }
+      input, select {
+        margin: 4px;
+        outline: none;
+        border: none;
+        background: #fff;
+        border-radius: 16px;
+        padding: 5px 12px 3px;
+        font-size: 16px;
+        box-sizing: border-box;
+        width: 160px;
+      }
+      #可用裝備 td:not(:first-child) input {
+        width: 80px;
+      }
+      #main {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        grid-template-rows: auto auto 1fr;
+        align-items: start;
+        gap: 12px 24px;
+        height: 100%;
+      }
+      hr {
+        grid-column: 2 span;
+        width: 100%;
+      }
+      #選擇區 {
+        display: flex;
+        flex-direction: column;
+        width: max-content;
+      }
+      #裝備區 {
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+      }
+      #裝備區 thead {
+        position: sticky;
+        top: 2px;
+        background: #333333;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="main">
+      <div id="輸入區">
+        職業：<select id="職業" oninput="更新結果()"></select><br/>
+        熟練度 52% 填 0.52<br/>
+        熟練度：<label><input id="熟練度" type="number" value="0.52" oninput="更新結果()"/></label><br/>
+        面板上 84(72+12) 的話要填 72<br/>
+        力量：<label><input id="力量" type="number" value="4" oninput="更新結果()"/></label><br/>
+        敏捷：<label><input id="敏捷" type="number" value="4" oninput="更新結果()"/></label><br/>
+        智力：<label><input id="智力" type="number" value="4" oninput="更新結果()"/></label><br/>
+        幸運：<label><input id="幸運" type="number" value="4" oninput="更新結果()"/></label><br/>
+      </div>
+      <div id="結果區">
+        表攻：<output id="表攻"></output>
+      </div>
+      <hr/>
+      <div id="選擇區"></div>
+      <div id="裝備區">
+        <table>
+          <thead>
+            <tr>
+              <th>裝備名</td>
+              <th>部位</td>
+              <th>武器類型</td>
+              <th>攻擊速度</td>
+              <th>攻擊力</td>
+              <th>力量</td>
+              <th>敏捷</td>
+              <th>智力</td>
+              <th>幸運</td>
+            </tr>
+          </thead>
+          <tbody id="可用裝備"></tbody>
+        </table>
+        <button id="新增一列" onclick="新增表格列()">新增一列</button>
+      </div>
+    </main>
+    <script>
+      function 新增表格列() {
+        let tr = document.createElement("tr");
+        tr.innerHTML = '<td><input class="裝備名"/></td><td><select class="部位"></select></td><td><select class="武器類型"></select></td><td><input class="攻擊速度"/></td><td><input class="攻擊力" type="number"/></td><td><input class="力量" type="number"/></td><td><input class="敏捷" type="number"/></td><td><input class="智力" type="number"/></td><td><input class="幸運" type="number"/></td>';
+        更新下拉選單_武器類型(tr.querySelector(".武器類型"));
+        更新下拉選單_部位(tr.querySelector(".部位"));
+        可用裝備.append(tr);
+        tr.querySelectorAll("select, input").forEach(el => el.addEventListener("input", () => tr.更新()));
+        tr.id = new Date().getTime();
+        tr.更新 = () => {
+          tr.自身資料 = {
+            裝備名: tr.querySelector(".裝備名").value,
+            部位: tr.querySelector(".部位").value,
+            武器類型: tr.querySelector(".武器類型").value,
+            攻擊速度: tr.querySelector(".攻擊速度").value,
+            攻擊力: +tr.querySelector(".攻擊力").value,
+            力量: +tr.querySelector(".力量").value,
+            敏捷: +tr.querySelector(".敏捷").value,
+            智力: +tr.querySelector(".智力").value,
+            幸運: +tr.querySelector(".幸運").value,
+          };
+          更新可穿裝備(tr);
+          更新結果();
+        };
+        tr.更新();
+        目前裝備庫[tr.id] = tr;
+      }
+      let 目前裝備庫 = {};
+      function 更新可穿裝備(tr) {
+        let 資料 = tr.自身資料;
+        let opt = 選擇區.querySelector(`option[value="${tr.id}"]`);
+        if(!opt) {
+          opt = document.createElement("option");
+          opt.setAttribute("value", tr.id);
+        }
+        if(!opt.closest(`select[裝備部位="${tr.自身資料.部位}"]`)) {
+          選擇區.querySelector(`select[裝備部位="${tr.自身資料.部位}"]`).append(opt);
+        }
+        opt.innerText = tr.自身資料.裝備名;
+      }
+      function 更新結果() {
+        let 主屬 = 0;
+        let 副屬 = 0;
+        let 攻擊力 = 0;
+        let 職業資料 = 職業數值[職業.value];
+        職業資料.主屬.forEach(屬性名 => 主屬 += +document.querySelector(`[id="${屬性名}"]`).value);
+        職業資料.副屬.forEach(屬性名 => 副屬 += +document.querySelector(`[id="${屬性名}"]`).value);
+        選擇區.querySelectorAll("select").forEach(部位選擇 => {
+          let 裝備資料 = 目前裝備庫[部位選擇.value]?.自身資料;
+          if(!裝備資料) return;
+          攻擊力 += +裝備資料.攻擊力;
+          職業資料.主屬.forEach(屬性名 => 主屬 += +裝備資料[屬性名]);
+          職業資料.副屬.forEach(屬性名 => 副屬 += +裝備資料[屬性名]);
+        });
+        let 武器選擇 = 選擇區.querySelector('select[裝備部位="武器"]');
+        let 武器資料 = 目前裝備庫[武器選擇.value]?.自身資料;
+        let 係數 = 武器係數[武器資料?.武器類型];
+        console.log(主屬, 副屬, 攻擊力);
+        let 小表攻 = Math.round((主屬 * 係數?.min * 0.9 * +熟練度.value + 副屬) * 攻擊力 / 100, 0);
+        let 大表攻 = Math.round((主屬 * 係數?.max + 副屬) * 攻擊力 / 100, 0);
+        表攻.value = 小表攻 + "~" + 大表攻;
+      }
+      const 職業數值 = {
+        十字軍: { 顯示:   ["狂戰士", "十字軍", "英雄"], 主屬: ["力量"], 副屬: ["敏捷"] },
+        騎士:   { 顯示: ["見習騎士", "騎士", "聖騎士"], 主屬: ["力量"], 副屬: ["敏捷"] },
+        龍騎士: { 顯示: ["槍騎兵", "龍騎士", "黑騎士"], 主屬: ["力量"], 副屬: ["敏捷"] },
+        遊俠:   { 顯示:       ["獵人", "遊俠", "箭神"], 主屬: ["敏捷"], 副屬: ["力量"] },
+        狙擊手: { 顯示: ["弓弩手", "狙擊手", "神射手"], 主屬: ["敏捷"], 副屬: ["力量"] },
+        暗殺者: { 顯示:   ["刺客", "暗殺者", "夜使者"], 主屬: ["幸運"], 副屬: ["敏捷"] },
+        神偷:   { 顯示:   ["俠客", "神偷", "暗影神偷"], 主屬: ["幸運"], 副屬: ["力量", "敏捷"] },
+        神槍手: { 顯示:     ["槍手", "神槍手", "槍神"], 主屬: ["敏捷"], 副屬: ["力量"] },
+        格鬥家: { 顯示:     ["打手", "格鬥家", "拳霸"], 主屬: ["力量"], 副屬: ["敏捷"] },
+      };
+      const 武器係數 = {
+        單手劍: { max: 4.2, min: 4.2 },
+        雙手劍: { max: 4.8, min: 4.8 },
+        單手斧: { max: 4.8, min: 3.6 },
+        單手棍: { max: 4.8, min: 3.6 },
+        雙手斧: { max: 5.2, min: 4 },
+        雙手棍: { max: 5.2, min: 4 },
+        矛: { max: 5.2, min: 3.5 },
+        槍: { max: 5.1, min: 3.6 },
+        短刀: { max: 4.2, min: 3.6 },
+        拳套: { max: 3.6, min: 3.6 },
+        弓: { max: 3.4, min: 3.4 },
+        弩: { max: 3.6, min: 3.6 },
+        指虎: { max: 4.8, min: 4.8 },
+        火槍: { max: 3.6, min: 3.6 },
+      };
+      window.addEventListener("load", () => {
+        更新下拉選單_職業(職業);
+        更新選擇區();
+        新增表格列();
+      });
+      function 更新選擇區() {
+        選擇區.innerHTML = "";
+        部位.forEach(部位名 => {
+          let label = document.createElement("label");
+          let span = document.createElement("span");
+          span.innerText = 部位名;
+          let select = document.createElement("select");
+          select.setAttribute("裝備部位", 部位名);
+          select.addEventListener("input", () => 更新結果());
+
+          let opt = document.createElement("option");
+          opt.setAttribute("value", "");
+          opt.innerText = "無";
+          select.append(opt);
+
+          label.append(span, select);
+          選擇區.append(label);
+        });
+      }
+      function 更新下拉選單_職業(el) {
+        el.innerHTML = "";
+        Object.keys(職業數值).map(職業名 => {
+          職業數值[職業名].顯示.forEach(str => {
+            let opt = document.createElement("option");
+            opt.setAttribute("value", 職業名);
+            opt.innerText = str;
+            el.append(opt);
+          });
+        });
+      }
+      function 更新下拉選單_武器類型(el) {
+        el.innerHTML = "";
+        let opt = document.createElement("option");
+        opt.setAttribute("value", "");
+        opt.innerText = "無";
+        el.append(opt);
+        Object.keys(武器係數).map(str => {
+          let opt = document.createElement("option");
+          opt.setAttribute("value", str);
+          opt.innerText = str;
+          el.append(opt);
+        });
+      }
+      const 部位 = ["帽子", "勳章", "臉飾", "眼鏡", "耳環", "肩膀", "披風", "衣服", "項鍊", "武器", "盾牌", "手套", "褲子", "腰帶", "鞋子"];
+      function 更新下拉選單_部位(el) {
+        el.innerHTML = "";
+        部位.forEach(str => {
+          let opt = document.createElement("option");
+          opt.setAttribute("value", str);
+          opt.innerText = str;
+          el.append(opt);
+        });
+      }
+    </script>
+  </body>
+</html>
