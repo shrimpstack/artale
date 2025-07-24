@@ -58,31 +58,31 @@
         <option>台幣為主</option>
       </select>
       <div class="比值列" type="雪為主">
-        <label class="text"><input id="A_雪比楓" type="number" oninput="算比值_A()" value="1"/><span>雪</span></label>
+        <label class="text"><input id="A_雪比楓_雪" type="number" oninput="算比值_A()" value="1"/><span>雪</span></label>
         ：
-        <label class="text"><input id="A_楓比雪" type="number" oninput="算比值_A()" value="33"/><span>W 楓幣</span></label>
+        <label class="text"><input id="A_雪比楓_楓" type="number" oninput="算比值_A()" value="33"/><span>W 楓幣</span></label>
         <br/>
-        <label class="text"><input id="A_雪比台" type="number" oninput="算比值_A()" value="1"/><span>雪</span></label>
+        <label class="text"><input id="A_雪比台_雪" type="number" oninput="算比值_A()" value="1"/><span>雪</span></label>
         ：
-        <label class="text"><input id="A_台比雪" type="number" oninput="算比值_A()" value="10000"/><span>台幣</span></label><br/>
+        <label class="text"><input id="A_雪比台_台" type="number" oninput="算比值_A()" value="10000"/><span>台幣</span></label><br/>
       </div>
       <div class="比值列" type="楓幣為主" hidden>
-        <label class="text"><input id="B_楓比雪" type="number" oninput="算比值_B()" value="33"/><span>W 楓幣</span></label>
+        <label class="text"><input id="B_楓比雪_楓" type="number" oninput="算比值_B()" value="33"/><span>W 楓幣</span></label>
         ：
-        <label class="text"><input id="B_雪比楓" type="number" oninput="算比值_B()" value="1"/><span>雪</span></label>
+        <label class="text"><input id="B_楓比雪_雪" type="number" oninput="算比值_B()" value="1"/><span>雪</span></label>
         <br/>
-        <label class="text"><input id="B_楓比台" type="number" oninput="算比值_B()" value="10000"/><span>W 楓幣</span></label>
+        <label class="text"><input id="B_楓比台_楓" type="number" oninput="算比值_B()" value="10000"/><span>W 楓幣</span></label>
         ：
-        <label class="text"><input id="B_台比楓" type="number" oninput="算比值_B()" value="1"/><span>台幣</span></label><br/>
+        <label class="text"><input id="B_楓比台_台" type="number" oninput="算比值_B()" value="1"/><span>台幣</span></label><br/>
       </div>
       <div class="比值列" type="台幣為主" hidden>
-        <label class="text"><input id="C_台比雪" type="number" oninput="算比值_C()" value="4.09"/><span>台幣</span></label>
+        <label class="text"><input id="C_台比雪_台" type="number" oninput="算比值_C()" value="4.09"/><span>台幣</span></label>
         ：
-        <label class="text"><input id="C_雪比台" type="number" oninput="算比值_C()" value="1"/><span>雪</span></label>
+        <label class="text"><input id="C_台比雪_雪" type="number" oninput="算比值_C()" value="1"/><span>雪</span></label>
         <br/>
-        <label class="text"><input id="C_台比楓" type="number" oninput="算比值_C()" value="1"/><span>台幣</span></label>
+        <label class="text"><input id="C_台比楓_台" type="number" oninput="算比值_C()" value="1"/><span>台幣</span></label>
         ：
-        <label class="text"><input id="C_楓比台" type="number" oninput="算比值_C()" value="8.07"/><span>W 楓幣</span></label><br/>
+        <label class="text"><input id="C_台比楓_楓" type="number" oninput="算比值_C()" value="8.07"/><span>W 楓幣</span></label><br/>
       </div>
       <div>WC固定為「400 WC = 60台幣」</div>
     </div>
@@ -95,10 +95,10 @@
     </div>
     <script>
       window.addEventListener("load", () => {
-        A_雪比楓.value = 1;
-        A_楓比雪.value = 33;
-        A_雪比台.value = 1;
-        A_台比雪.value = 4.09;
+        A_雪比楓_雪.value = 1;
+        A_雪比楓_楓.value = 33;
+        A_雪比台_雪.value = 1;
+        A_雪比台_台.value = 4.09;
         雪.value = 1;
         算比值_A();
       });
@@ -106,72 +106,72 @@
         document.querySelectorAll('.比值列').forEach(el => el.setAttribute("hidden", ""));
         document.querySelector(`[type="${value}"]`).removeAttribute("hidden", "");
       }
-      let 雪比楓 = 1, 楓比雪 = 1, 雪比台 = 1, 台比雪 = 1, 台比楓 = 1, 楓比台 = 1;
+      let 一雪幾楓 = 1, 一楓幾雪 = 1, 一雪幾台 = 1, 一台幾雪 = 1, 一台幾楓 = 1, 一楓幾台 = 1;
       let WC比台 = 60 / 400, 台比WC = 400 / 60;
       function 算比值_A() {
-        雪比楓 = A_楓比雪.value / A_雪比楓.value;
-        楓比雪 = A_雪比楓.value / A_楓比雪.value;
-        雪比台 = A_台比雪.value / A_雪比台.value;
-        台比雪 = A_雪比台.value / A_台比雪.value;
-        台比楓 = 台比雪 * 雪比楓;
-        楓比台 = 楓比雪 * 雪比台;
-        B_雪比楓.value = A_雪比楓.value;
-        B_楓比雪.value = A_楓比雪.value;
-        C_雪比台.value = A_雪比台.value;
-        C_台比雪.value = A_台比雪.value;
-        B_楓比台.value = C_楓比台.value = 台比楓;
-        B_台比楓.value = C_台比楓.value = 1;
+        一雪幾楓 = A_雪比楓_楓.value / A_雪比楓_雪.value;
+        一楓幾雪 = A_雪比楓_雪.value / A_雪比楓_楓.value;
+        一雪幾台 = A_雪比台_台.value / A_雪比台_雪.value;
+        一台幾雪 = A_雪比台_雪.value / A_雪比台_台.value;
+        一台幾楓 = 一台幾雪 * 一雪幾楓;
+        一楓幾台 = 一楓幾雪 * 一雪幾台;
+        B_楓比雪_雪.value = A_雪比楓_雪.value;
+        B_楓比雪_楓.value = A_雪比楓_楓.value;
+        C_台比雪_雪.value = A_雪比台_雪.value;
+        C_台比雪_台.value = A_雪比台_台.value;
+        B_楓比台_楓.value = C_台比楓_楓.value = 一台幾楓;
+        B_楓比台_台.value = C_台比楓_台.value = 1;
         雪變更();
       }
       function 算比值_B() {
-        雪比楓 = B_楓比雪.value / B_雪比楓.value;
-        楓比雪 = B_雪比楓.value / B_楓比雪.value;
-        雪比台 = 雪比楓 * 楓比台;
-        台比雪 = 台比楓 * 楓比雪;
-        台比楓 = B_楓比台.value / B_台比楓.value;
-        楓比台 = B_台比楓.value / B_楓比台.value;
-        A_楓比雪.value = B_楓比雪.value;
-        A_雪比楓.value = B_雪比楓.value;
-        C_楓比台.value = B_楓比台.value;
-        C_台比楓.value = B_台比楓.value;
-        A_雪比台.value = C_雪比台.value = 1;
-        A_台比雪.value = C_台比雪.value = 雪比台;
+        一雪幾楓 = B_楓比雪_楓.value / B_楓比雪_雪.value;
+        一楓幾雪 = B_楓比雪_雪.value / B_楓比雪_楓.value;
+        一台幾楓 = B_楓比台_楓.value / B_楓比台_台.value;
+        一楓幾台 = B_楓比台_台.value / B_楓比台_楓.value;
+        一雪幾台 = 一雪幾楓 * 一楓幾台;
+        一台幾雪 = 一台幾楓 * 一楓幾雪;
+        A_雪比楓_楓.value = B_楓比雪_楓.value;
+        A_雪比楓_雪.value = B_楓比雪_雪.value;
+        C_台比楓_楓.value = B_楓比台_楓.value;
+        C_台比楓_台.value = B_楓比台_台.value;
+        A_雪比台_雪.value = C_台比雪_雪.value = 1;
+        A_雪比台_台.value = C_台比雪_台.value = 一雪幾台;
         楓幣變更();
       }
       function 算比值_C() {
-        雪比楓 = 雪比台 * 台比楓;
-        楓比雪 = 楓比台 * 台比雪;
-        雪比台 = C_台比雪.value / C_雪比台.value;
-        台比雪 = C_雪比台.value / C_台比雪.value;
-        台比楓 = C_楓比台.value / C_台比楓.value;
-        楓比台 = C_台比楓.value / C_楓比台.value;
-        A_台比雪.value = C_台比雪.value;
-        A_雪比台.value = C_雪比台.value;
-        B_台比楓.value = C_台比楓.value;
-        B_楓比台.value = C_楓比台.value;
-        A_雪比楓.value = B_雪比楓.value = 1;
-        A_楓比雪.value = B_楓比雪.value = 雪比楓;
+        一雪幾台 = C_台比雪_台.value / C_台比雪_雪.value;
+        一台幾雪 = C_台比雪_雪.value / C_台比雪_台.value;
+        一台幾楓 = C_台比楓_楓.value / C_台比楓_台.value;
+        一楓幾台 = C_台比楓_台.value / C_台比楓_楓.value;
+        一雪幾楓 = 一雪幾台 * 一台幾楓;
+        一楓幾雪 = 一楓幾台 * 一台幾雪;
+        A_雪比台_台.value = C_台比雪_台.value;
+        A_雪比台_雪.value = C_台比雪_雪.value;
+        B_楓比台_台.value = C_台比楓_台.value;
+        B_楓比台_楓.value = C_台比楓_楓.value;
+        A_雪比楓_雪.value = B_楓比雪_雪.value = 1;
+        A_雪比楓_楓.value = B_楓比雪_楓.value = 一雪幾楓;
         台幣變更();
       }
       function 雪變更() {
-        台幣.value = 四捨五入(雪.value * 雪比台);
-        楓幣.value = 四捨五入(雪.value * 雪比楓);
+        台幣.value = 四捨五入(雪.value * 一雪幾台);
+        楓幣.value = 四捨五入(雪.value * 一雪幾楓);
         WC.value = 四捨五入(台幣.value * 台比WC);
       }
       function 台幣變更() {
-        雪.value = 四捨五入(台幣.value * 台比雪);
-        楓幣.value = 四捨五入(台幣.value * 台比楓);
+        雪.value = 四捨五入(台幣.value * 一台幾雪);
+        楓幣.value = 四捨五入(台幣.value * 一台幾楓);
         WC.value = 四捨五入(台幣.value * 台比WC);
       }
       function 楓幣變更() {
-        雪.value = 四捨五入(楓幣.value * 楓比雪);
-        台幣.value = 四捨五入(楓幣.value * 楓比台);
+        雪.value = 四捨五入(楓幣.value * 一楓幾雪);
+        台幣.value = 四捨五入(楓幣.value * 一楓幾台);
         WC.value = 四捨五入(台幣.value * 台比WC);
       }
       function WC變更() {
         台幣.value = 四捨五入(WC.value * WC比台);
-        雪.value = 四捨五入(台幣.value * 台比雪);
-        楓幣.value = 四捨五入(台幣.value * 台比楓);
+        雪.value = 四捨五入(台幣.value * 一台幾雪);
+        楓幣.value = 四捨五入(台幣.value * 一台幾楓);
       }
       function 四捨五入(value) {
         return Math.round(value * "1e3") / "1e3";
