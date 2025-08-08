@@ -44,6 +44,9 @@
         display: flex;
         flex-direction: column;
         width: max-content;
+        min-width: 100%;
+        overflow: auto;
+        height: 100%;
       }
       #裝備區 {
         width: 100%;
@@ -124,15 +127,13 @@
       let 目前裝備庫 = {};
       function 更新可穿裝備(tr) {
         let 資料 = tr.自身資料;
-        let opt = 選擇區.querySelector(`option[value="${tr.id}"]`);
-        if(!opt) {
+        選擇區.querySelectorAll(`option[value="${tr.id}"]`).forEach(old_opt => old_opt.remove());
+        選擇區.querySelectorAll(`select[裝備部位="${tr.自身資料.部位}"]`).forEach(select_el => {
           opt = document.createElement("option");
           opt.setAttribute("value", tr.id);
-        }
-        if(!opt.closest(`select[裝備部位="${tr.自身資料.部位}"]`)) {
-          選擇區.querySelector(`select[裝備部位="${tr.自身資料.部位}"]`).append(opt);
-        }
-        opt.innerText = tr.自身資料.裝備名;
+          opt.innerText = tr.自身資料.裝備名;
+          select_el.append(opt);
+        });
       }
       function 更新結果() {
         let 主屬 = 0;
@@ -230,10 +231,11 @@
           el.append(opt);
         });
       }
-      const 部位 = ["帽子", "勳章", "臉飾", "眼鏡", "耳環", "肩膀", "披風", "衣服", "項鍊", "武器", "盾牌", "手套", "褲子", "腰帶", "鞋子"];
+      const 部位 = ["帽子", "勳章", "臉飾", "眼鏡", "耳環", "肩膀", "披風", "衣服", "項鍊", "武器", "盾牌", "手套", "褲子", "腰帶", "鞋子", "戒指", "戒指", "戒指", "戒指"];
       function 更新下拉選單_部位(el) {
         el.innerHTML = "";
         部位.forEach(str => {
+          if(el.querySelector(`[value="${str}"]`)) return;
           let opt = document.createElement("option");
           opt.setAttribute("value", str);
           opt.innerText = str;
