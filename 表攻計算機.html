@@ -58,11 +58,20 @@
         top: 2px;
         background: #333333;
       }
+      button {
+        all: unset;
+        background: #fff;
+        color: #333;
+        border-radius: 16px;
+        padding: 0 16px;
+        margin-right: 8px;
+      }
     </style>
   </head>
   <body>
     <main id="main">
       <div id="輸入區">
+        <button onclick="存檔()">存檔</button><button onclick="讀檔()">讀檔</button><br/>
         職業：<select id="職業" oninput="更新結果()"></select><br/>
         熟練度 52% 填 0.52<br/>
         熟練度：<label><input id="熟練度" type="number" value="0.52" oninput="更新結果()"/></label><br/>
