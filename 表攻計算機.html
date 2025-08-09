@@ -98,14 +98,103 @@
       </div>
     </main>
     <script>
-      function 新增表格列() {
+      function 存檔() {
+        let blob = new Blob([JSON.stringify(取得資料(), null, '  ')], {type:'text/plain;charset=utf-8'});
+        let download = document.createElement("a");
+        download.download = '表攻計算資料.txt';
+        download.href = URL.createObjectURL(blob);
+        download.click();
+      }
+      function 讀檔() {
+        if (typeof FileReader != 'function') {
+          alert('瀏覽器不支援讀取檔案功能，請換瀏覽器');
+          return;
+        }
+        let upload = document.createElement("input");
+        upload.type = "file";
+        upload.addEventListener('change', () => {
+          let file = upload.files[0];
+          if(!(/\.txt$/.test(file.name))) {
+            alert('檔案類型錯誤');
+            return;
+          }
+          let reader = new FileReader();
+          reader.addEventListener('load', () => {
+            try {
+              let file_data = JSON.parse(reader.result);
+              輸入資料(file_data);
+            }
+            catch(e) {
+              alert('檔案格式錯誤');
+              console.log(e);
+            }
+          });
+          reader.readAsText(file, 'utf-8');
+        });
+        upload.click();
+      }
+      function 取得資料() {
+        let 資料 = {
+          基本: {
+            職業: 職業.value,
+            熟練度: +熟練度.value,
+            力量: +力量.value,
+            敏捷: +敏捷.value,
+            智力: +智力.value,
+            幸運: +幸運.value,
+          },
+          裝備庫: {},
+          裝備中: {},
+        };
+        Object.entries(目前裝備庫).forEach(([id, tr]) => {
+          資料.裝備庫[id] = tr.自身資料;
+        });
+        [...選擇區.querySelectorAll("select")].filter(se => se.value).forEach(se => {
+          let 部位 = se.getAttribute("裝備部位");
+          if(!資料.裝備中[部位]) 資料.裝備中[部位] = [];
+          資料.裝備中[部位].push(se.value);
+        });
+        return 資料;
+      }
+      function 輸入資料(資料) {
+        目前裝備庫 = {};
+        可用裝備.innerHTML = "";
+        職業.value = 資料.基本?.職業;
+        熟練度.value = 資料.基本?.熟練度;
+        力量.value = 資料.基本?.力量;
+        敏捷.value = 資料.基本?.敏捷;
+        智力.value = 資料.基本?.智力;
+        幸運.value = 資料.基本?.幸運;
+        Object.entries(資料.裝備庫).forEach(([id, 裝備資料]) => {
+          let tr = 新增表格列(id);
+          tr.querySelector(".裝備名").value = 裝備資料.裝備名;
+          tr.querySelector(".部位").value = 裝備資料.部位;
+          tr.querySelector(".武器類型").value = 裝備資料.武器類型;
+          tr.querySelector(".攻擊速度").value = 裝備資料.攻擊速度;
+          tr.querySelector(".攻擊力").value = 裝備資料.攻擊力;
+          tr.querySelector(".力量").value = 裝備資料.力量;
+          tr.querySelector(".敏捷").value = 裝備資料.敏捷;
+          tr.querySelector(".智力").value = 裝備資料.智力;
+          tr.querySelector(".幸運").value = 裝備資料.幸運;
+          tr.更新();
+        });
+        Object.entries(資料.裝備中).forEach(([部位, arr]) => {
+          let 可裝備欄位 = [...選擇區.querySelectorAll(`[裝備部位="${部位}"]`)];
+          可裝備欄位.forEach((欄位, i) => {
+            if(!arr[i]) return;
+            欄位.value = arr[i];
+          });
+        });
+        更新結果();
+      }
+      function 新增表格列(指定id) {
         let tr = document.createElement("tr");
         tr.innerHTML = '<td><input class="裝備名"/></td><td><select class="部位"></select></td><td><select class="武器類型"></select></td><td><input class="攻擊速度"/></td><td><input class="攻擊力" type="number"/></td><td><input class="力量" type="number"/></td><td><input class="敏捷" type="number"/></td><td><input class="智力" type="number"/></td><td><input class="幸運" type="number"/></td>';
         更新下拉選單_武器類型(tr.querySelector(".武器類型"));
         更新下拉選單_部位(tr.querySelector(".部位"));
         可用裝備.append(tr);
         tr.querySelectorAll("select, input").forEach(el => el.addEventListener("input", () => tr.更新()));
-        tr.id = new Date().getTime();
+        tr.id = 指定id || new Date().getTime();
         tr.更新 = () => {
           tr.自身資料 = {
             裝備名: tr.querySelector(".裝備名").value,
@@ -123,6 +212,7 @@
         };
         tr.更新();
         目前裝備庫[tr.id] = tr;
+        return tr;
       }
       let 目前裝備庫 = {};
       function 更新可穿裝備(tr) {
@@ -139,7 +229,7 @@
         let 主屬 = 0;
         let 副屬 = 0;
         let 攻擊力 = 0;
-        let 職業資料 = 職業數值[職業.value];
+        let 職業資料 = 職業數值[職業.value.replace(/\_.*$/, '')];
         職業資料.主屬.forEach(屬性名 => 主屬 += +document.querySelector(`[id="${屬性名}"]`).value);
         職業資料.副屬.forEach(屬性名 => 副屬 += +document.querySelector(`[id="${屬性名}"]`).value);
         選擇區.querySelectorAll("select").forEach(部位選擇 => {
@@ -212,7 +302,7 @@
         Object.keys(職業數值).map(職業名 => {
           職業數值[職業名].顯示.forEach(str => {
             let opt = document.createElement("option");
-            opt.setAttribute("value", 職業名);
+            opt.setAttribute("value", 職業名 + "_" + str);
             opt.innerText = str;
             el.append(opt);
           });
